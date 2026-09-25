@@ -287,19 +287,27 @@ global with sharing class HealthFirstApexREST {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono">
                 <div className="bg-slate-900 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 block text-[10px]">Salesforce Instance URL:</span>
-                  <span className="text-sky-300 font-semibold">{sfConfig.instanceUrl}</span>
+                  <span className="text-slate-500 block text-[10px]">Salesforce Org ID:</span>
+                  <span className="text-emerald-400 font-bold">{sfConfig.orgId}</span>
+                </div>
+                <div className="bg-slate-900 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 block text-[10px]">MIAW Deployment Name:</span>
+                  <span className="text-sky-300 font-semibold">{sfConfig.deploymentName}</span>
+                </div>
+                <div className="bg-slate-900 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 block text-[10px]">Embedded Messaging Site URL:</span>
+                  <span className="text-sky-300 font-semibold truncate block">{sfConfig.siteUrl}</span>
+                </div>
+                <div className="bg-slate-900 p-3 rounded border border-slate-800">
+                  <span className="text-slate-500 block text-[10px]">SCRT2 URL:</span>
+                  <span className="text-sky-300 font-semibold truncate block">{sfConfig.scrt2Url}</span>
                 </div>
                 <div className="bg-slate-900 p-3 rounded border border-slate-800">
                   <span className="text-slate-500 block text-[10px]">API Version:</span>
                   <span className="text-sky-300 font-semibold">{sfConfig.apiVersion}</span>
                 </div>
                 <div className="bg-slate-900 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 block text-[10px]">Connected App Consumer Key:</span>
-                  <span className="text-sky-300 font-semibold">{sfConfig.connectedAppId}</span>
-                </div>
-                <div className="bg-slate-900 p-3 rounded border border-slate-800">
-                  <span className="text-slate-500 block text-[10px]">OAuth 2.0 Bearer Token:</span>
+                  <span className="text-slate-500 block text-[10px]">OAuth Bearer Token / Status:</span>
                   <span className="text-emerald-400 font-semibold truncate block">{sfConfig.accessToken}</span>
                 </div>
               </div>

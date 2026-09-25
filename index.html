@@ -13,5 +13,28 @@
   <body class="bg-slate-50 text-slate-900 font-['Plus_Jakarta_Sans',sans-serif] antialiased selection:bg-cyan-500 selection:text-white">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Salesforce Agentforce Embedded Messaging (health360 Org 00Dg500000D4Gmn) -->
+    <script type='text/javascript'>
+      function initEmbeddedMessaging() {
+        try {
+          if (window.embeddedservice_bootstrap && window.embeddedservice_bootstrap.settings) {
+            window.embeddedservice_bootstrap.settings.language = 'en_US';
+            window.embeddedservice_bootstrap.init(
+              '00Dg500000D4Gmn',
+              'health360',
+              'https://orgfarm-fb6867c8ec-dev-ed.develop.my.site.com/ESWhealth3601790336470943',
+              {
+                scrt2URL: 'https://orgfarm-fb6867c8ec-dev-ed.develop.my.salesforce-scrt.com'
+              }
+            );
+            console.log('✅ Salesforce Agentforce Embedded Messaging initialized successfully!');
+          }
+        } catch (err) {
+          console.error('Error loading Salesforce Embedded Messaging: ', err);
+        }
+      };
+    </script>
+    <script type='text/javascript' src='https://orgfarm-fb6867c8ec-dev-ed.develop.my.site.com/ESWhealth3601790336470943/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
   </body>
 </html>

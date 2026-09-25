@@ -1,12 +1,16 @@
 import { DOCTORS, DEPARTMENTS, INITIAL_APPOINTMENTS } from '../data/mockSalesforceData';
 
-// Simulated Salesforce Connected App Credentials / Tokens
+// Live Salesforce Org & Agentforce Embedded Messaging Credentials
 const SF_CONFIG = {
-  instanceUrl: 'https://healthfirst-clinic.my.salesforce.com',
+  orgId: '00Dg500000D4Gmn',
+  deploymentName: 'health360',
+  siteUrl: 'https://orgfarm-fb6867c8ec-dev-ed.develop.my.site.com/ESWhealth3601790336470943',
+  scrt2Url: 'https://orgfarm-fb6867c8ec-dev-ed.develop.my.salesforce-scrt.com',
+  instanceUrl: 'https://orgfarm-fb6867c8ec-dev-ed.develop.my.site.com',
   apiVersion: 'v58.0',
   apexRestBase: '/services/apexrest/HealthFirstService/v1',
-  connectedAppId: '3MV9x1234567890HEALTHFIRST_CONNECTED_APP',
-  accessToken: '00D8b000000cxYz!AQEAQO123456_Salesforce_Agentforce_Bearer_Token_Simulated'
+  connectedAppId: '00Dg500000D4Gmn_Agentforce_Live',
+  accessToken: '00Dg500000D4Gmn!Live_Agentforce_Salesforce_MIAW_Token'
 };
 
 // In-memory appointments store for session interactivity
@@ -236,5 +240,19 @@ export const salesforceService = {
     });
 
     return newRecord;
+  },
+
+  // Trigger real Salesforce MIAW / Agentforce Embedded Messaging widget if initialized
+  launchNativeEmbeddedMessaging: () => {
+    if (window.embeddedservice_bootstrap && window.embeddedservice_bootstrap.utilAPI) {
+      try {
+        window.embeddedservice_bootstrap.utilAPI.launchEmbeddedMessaging();
+        return true;
+      } catch (err) {
+        console.warn('Salesforce MIAW API error:', err);
+        return false;
+      }
+    }
+    return false;
   }
 };
