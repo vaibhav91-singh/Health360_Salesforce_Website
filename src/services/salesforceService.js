@@ -37,6 +37,29 @@ export const salesforceService = {
   // Get audit logs
   getAuditLogs: () => [...restAuditLogs],
 
+  // Execute real Salesforce REST API call if token and CORS are active
+  executeSalesforceRest: async (endpoint, method = 'GET', body = null) => {
+    try {
+      const url = `${SF_CONFIG.instanceUrl}${endpoint}`;
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SF_CONFIG.accessToken}`
+      };
+      
+      const options = { method, headers };
+      if (body) options.body = JSON.stringify(body);
+
+      const response = await fetch(url, options);
+      if (response.ok) {
+        const data = await response.json();
+        return { success: true, data };
+      }
+    } catch (e) {
+      console.warn('Real Salesforce REST call attempted. Using active session handler:', e);
+    }
+    return { success: false };
+  },
+
   // Search appointment by ID or Email (SOQL simulation)
   findAppointment: async (searchQuery) => {
     const cleanQuery = searchQuery.trim().toUpperCase();
