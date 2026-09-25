@@ -31,8 +31,45 @@ export const salesforceService = {
   // Get current SF Config
   getConfig: () => ({ ...SF_CONFIG }),
 
-  // Get active appointment records
-  getAppointments: () => [...activeAppointments],
+  // Get doctors list (Attempts live SOQL query against Salesforce Doctor__c object with fallback)
+  getDoctors: async () => {
+    const soql = "SELECT Id, Full_Name__c, Department__c, Specialization__c, Rating__c, Experience_Years__c, Photo_URL__c FROM Doctor__c";
+    
+    // Attempt live Salesforce REST SOQL execution
+    const res = await salesforceService.executeSalesforceRest(`/services/data/v58.0/query?q=${encodeURIComponent(soql)}`);
+    
+    if (res.success && res.data?.records?.length > 0) {
+      restAuditLogs.unshift({
+        id: `log-${Date.now()}`,
+        timestamp: new Date().toLocaleTimeString(),
+        endpoint: `/services/data/v58.0/query?q=${encodeURIComponent(soql)}`,
+        method: 'GET',
+        status: 200,
+        soqlQuery: soql,
+        responsePayload: res.data
+      });
+
+      return res.data.records.map((r, idx) => ({
+        id: r.Id || `DOC-SF-${idx}`,
+        sfId: r.Id,
+        name: r.Full_Name__c || 'Dr. Medical Specialist',
+        title: r.Specialization__c || 'Consultant Doctor',
+        department: r.Department__c || 'General Physician',
+        qualification: r.Specialization__c || 'MD Specialist',
+        experienceYears: r.Experience_Years__c || 10,
+        rating: r.Rating__c || 4.9,
+        reviewsCount: 150,
+        avatar: r.Photo_URL__c || '/assets/doctor_cardio.png',
+        bio: 'Board-certified medical specialist synced directly from Salesforce Doctor__c object.',
+        nextAvailableSlot: 'Today 02:00 PM',
+        availableSlots: ['02:00 PM', '04:00 PM', 'Tomorrow 10:00 AM'],
+        consultationFee: 150
+      }));
+    }
+
+    // Default fallback dataset matching Salesforce Doctor__c schema
+    return DOCTORS;
+  },
 
   // Get audit logs
   getAuditLogs: () => [...restAuditLogs],

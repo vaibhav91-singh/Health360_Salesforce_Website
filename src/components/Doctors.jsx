@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Star, 
   Clock, 
@@ -10,14 +10,23 @@ import {
   DollarSign,
   ChevronRight
 } from 'lucide-react';
-import { DOCTORS } from '../data/mockSalesforceData';
+import { salesforceService } from '../services/salesforceService';
 
 export default function Doctors({ onBookDoctor, onOpenChat }) {
   const [selectedDept, setSelectedDept] = useState('All');
+  const [doctorsList, setDoctorsList] = useState([]);
+
+  useEffect(() => {
+    async function loadDocs() {
+      const data = await salesforceService.getDoctors();
+      setDoctorsList(data);
+    }
+    loadDocs();
+  }, []);
 
   const filteredDoctors = selectedDept === 'All' 
-    ? DOCTORS 
-    : DOCTORS.filter((d) => d.department.toLowerCase() === selectedDept.toLowerCase());
+    ? doctorsList 
+    : doctorsList.filter((d) => d.department.toLowerCase() === selectedDept.toLowerCase());
 
   return (
     <section id="doctors" className="py-16 sm:py-24 bg-slate-50 border-t border-slate-200/80">
